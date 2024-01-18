@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Server", "Chat.Server\Chat.Server.csproj", "{A9A6815F-6947-44A5-ADA3-EADB8AEA9D0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Identity", "Chat.Identity\Chat.Identity.csproj", "{7D2A8B32-F5E0-4E22-A937-2532B99CE620}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Friends", "Chat.Friends\Chat.Friends.csproj", "{38731961-D828-4B42-9438-42FE7DD58E2C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9A6815F-6947-44A5-ADA3-EADB8AEA9D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9A6815F-6947-44A5-ADA3-EADB8AEA9D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9A6815F-6947-44A5-ADA3-EADB8AEA9D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9A6815F-6947-44A5-ADA3-EADB8AEA9D0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D2A8B32-F5E0-4E22-A937-2532B99CE620}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D2A8B32-F5E0-4E22-A937-2532B99CE620}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D2A8B32-F5E0-4E22-A937-2532B99CE620}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D2A8B32-F5E0-4E22-A937-2532B99CE620}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38731961-D828-4B42-9438-42FE7DD58E2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38731961-D828-4B42-9438-42FE7DD58E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38731961-D828-4B42-9438-42FE7DD58E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38731961-D828-4B42-9438-42FE7DD58E2C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,34 @@
+﻿services:
+  server:
+    build:
+      context: ./Chat.Server
+      target: dev
+    ports:
+      - 14000:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+80'
+  identity:
+    build:
+      context: ./Chat.Identity
+      target: dev
+    ports:
+      - 14001:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+80'
+  friends:
+    build:
+      context: ./Chat.Friends
+      target: dev
+    ports:
+      - 14002:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+80'
+  client:
+    build:
+      context: ./Chat.Client
+      target: dev
+    ports:
+      - 14003:80
