@@ -10,6 +10,9 @@ Client side is written in React, server side in .NET.
 
 - [x] Create project
 - [ ] Create identity microservice
+  - [ ] Resolve cookies
+  - [ ] Find token
+  - [ ] Check logout redirect
 - [ ] Update client to use identity microservice
 - [ ] Create chat microservice
 - [ ] Update client to use chat microservice
