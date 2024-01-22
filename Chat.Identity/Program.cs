@@ -1,10 +1,19 @@
 using Chat.Identity;
 using Chat.Identity.Data;
+using Chat.Identity.Filters;
 using Chat.Identity.Models;
+using Chat.Identity.Validators;
+using FluentValidation;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IValidator<LoginViewModel>, LoginValidator>();
+builder.Services.AddScoped<IValidator<RegisterViewModel>, RegisterValidator>();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var dbconnstr = builder.Configuration.GetValue<string>("DbConnection");
 
@@ -36,18 +45,18 @@ builder.Services.AddIdentityServer()
 builder.Services.ConfigureApplicationCookie(config =>
 {
     config.Cookie.Name = "Char.Identity.Cookie";
-    config.LoginPath = "/Auth/Login";
-    config.LogoutPath = "/Auth/Logout";
+    config.LoginPath = "/Login";
+    config.LogoutPath = "/Logout";
 });
 
 var app = builder.Build();
 
-await using (app.Services.CreateAsyncScope())
+using (var scope = app.Services.CreateScope())
 {
     try
     {
-        var context = app.Services.GetRequiredService<AppDbContext>();
-        await DbInitializer.InitializeAsync(context);
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        DbInitializer.Initialize(context);
     }
     catch (Exception e)
     {
@@ -56,6 +65,9 @@ await using (app.Services.CreateAsyncScope())
     }
 }
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseIdentityServer();
 
 app.MapPost("/Login", async (HttpContext context, LoginViewModel login) =>
@@ -63,10 +75,7 @@ app.MapPost("/Login", async (HttpContext context, LoginViewModel login) =>
     var userManager = context.RequestServices.GetRequiredService<UserManager<User>>();
     var user = await userManager.FindByNameAsync(login.Name);
     if (user is null)
-    {
-        context.Response.StatusCode = StatusCodes.Status404NotFound;
-        return;
-    }
+        return Results.NotFound("User not found");
     var signinManager = context.RequestServices.GetRequiredService<SignInManager<User>>();
     var result = signinManager.PasswordSignInAsync(
         login.Name, 
@@ -74,11 +83,46 @@ app.MapPost("/Login", async (HttpContext context, LoginViewModel login) =>
         false,
         false).Result;
     if (result.Succeeded)
+        return Results.Ok(result);
+
+    return Results.BadRequest("Incorrect name or password");
+})
+    .AddEndpointFilter<LoginValidationFilter>();
+
+
+app.MapPost("/Register", async (HttpContext context, RegisterViewModel register) =>
+{
+    var userManager = context.RequestServices.GetRequiredService<UserManager<User>>();
+    var user = await userManager.FindByNameAsync(register.Name);
+    if (user is not null)
+        return Results.Conflict("User already exists");
+
+    user = new()
     {
-        context.Response.StatusCode = StatusCodes.Status200OK;
-        return;
+        UserName = register.Name,  // Обязательное поле
+        Name = register.Name
+    };
+
+    var result = await userManager.CreateAsync(user, register.Password);
+    if (result.Succeeded)
+    {
+        var signinManager = context.RequestServices.GetRequiredService<SignInManager<User>>();
+        await signinManager.SignInAsync(user, false);
+        return Results.Ok();
     }
-    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+    return Results.Problem("An error occurred");
+})
+    .AddEndpointFilter<RegisterValidationFilter>();
+
+app.MapPost("/Logout", async (HttpContext context, string logoutId) =>
+{
+    var signinManager = context.RequestServices.GetRequiredService<SignInManager<User>>();
+    await signinManager.SignOutAsync();
+
+    var interactionService = context.RequestServices.GetRequiredService<IIdentityServerInteractionService>();
+    var logoutRequest = await interactionService.GetLogoutContextAsync(logoutId);
+    return Results.Redirect(logoutRequest.PostLogoutRedirectUri);
 });
 
 app.Run();

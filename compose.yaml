@@ -14,6 +14,13 @@
       target: dev
     ports:
       - 14001:80
+    volumes:
+      - identity-db:/src/Chat.Identity
+    develop: 
+      watch:
+        - action: rebuild
+          paths:
+            - Chat.Identity
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+80'
@@ -32,3 +39,5 @@
       target: dev
     ports:
       - 14003:80
+volumes: 
+    identity-db:

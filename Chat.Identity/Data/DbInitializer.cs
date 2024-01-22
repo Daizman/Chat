@@ -2,8 +2,8 @@
 
 public class DbInitializer
 {
-    public static async Task InitializeAsync(AppDbContext context)
+    public static void Initialize(AppDbContext context)
     {
-        await context.Database.EnsureCreatedAsync();
+        context.Database.EnsureCreated();
     }
 }
