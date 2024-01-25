@@ -10,8 +10,8 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new List<ApiScope>
         {
-            new ApiScope("Chat.Friends", "Friends API"),
-            new ApiScope("Chat.Server", "Server API")
+            new("Chat.Friends", "Friends API"),
+            new("Chat.Server", "Server API")
         };
 
     public static IEnumerable<IdentityResource> IdentityResources =>
@@ -24,14 +24,14 @@ public static class Config
     public static IEnumerable<ApiResource> ApiResources =>
         new List<ApiResource>
         {
-            new ApiResource("Chat.Friends", "Friends API", new []
+            new("Chat.Friends", "Friends API", new []
             {
                 JwtClaimTypes.Name
             })
             {
                 Scopes = {"Chat.Friends"}
             },
-            new ApiResource("Chat.Server", "Server API", new []
+            new("Chat.Server", "Server API", new []
             {
                 JwtClaimTypes.Name
             })
@@ -43,7 +43,35 @@ public static class Config
     public static IEnumerable<Client> Clients =>
         new List<Client>
         {
-            new Client
+            new()
+            {
+                ClientId = "chat-client",
+                ClientName = "Chat Client",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+                RequirePkce = true,
+                RedirectUris =
+                {
+                    "http://client/"
+                },
+                AllowedCorsOrigins =
+                {
+                    ""
+                },
+                PostLogoutRedirectUris =
+                {
+                    "http://client/"
+                },
+                AllowedScopes =
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "Chat.Friends",
+                    "Chat.Server"
+                },
+                AllowAccessTokensViaBrowser = true
+            },
+            new()
             {
                 ClientId = "chat-friends",
                 ClientName = "Chat Friends",
@@ -70,7 +98,7 @@ public static class Config
                 },
                 AllowAccessTokensViaBrowser = true
             },
-            new Client
+            new()
             {
                 ClientId = "chat-server",
                 ClientName = "Chat Server",

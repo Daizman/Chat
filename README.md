@@ -9,10 +9,7 @@ Client side is written in React, server side in .NET.
 ## Stages
 
 - [x] Create project
-- [ ] Create identity microservice
-  - [ ] Resolve cookies
-  - [ ] Find token
-  - [ ] Check logout redirect
+- [x] Create identity microservice
 - [ ] Update client to use identity microservice
 - [ ] Create chat microservice
 - [ ] Update client to use chat microservice
@@ -20,3 +17,7 @@ Client side is written in React, server side in .NET.
 - [ ] Update client to use friends microservice
 - [ ] Update application to communicate only between friends
 - [ ] Update compose file
+
+## Notes
+
+For logout using `/connect/endsession`.

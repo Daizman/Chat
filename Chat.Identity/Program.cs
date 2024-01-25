@@ -7,6 +7,7 @@ using FluentValidation;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +50,16 @@ builder.Services.ConfigureApplicationCookie(config =>
     config.LogoutPath = "/Logout";
 });
 
+builder.Host.UseSerilog((context, config) 
+    => config.ReadFrom.Configuration(context.Configuration));
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    
+}
 
 using (var scope = app.Services.CreateScope())
 {
@@ -60,8 +70,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception e)
     {
-        var logger = app.Services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(e, "An error occurred while app initialization");
+        Log.Error(e, "An error occurred while app initialization");
     }
 }
 
@@ -70,14 +79,16 @@ app.UseSwaggerUI();
 
 app.UseIdentityServer();
 
-app.MapPost("/Login", async (HttpContext context, LoginViewModel login) =>
+app.MapPost("/Login", async (
+    LoginViewModel login,
+    UserManager<User> userManager,
+    SignInManager<User> signInManager
+    ) =>
 {
-    var userManager = context.RequestServices.GetRequiredService<UserManager<User>>();
     var user = await userManager.FindByNameAsync(login.Name);
     if (user is null)
         return Results.NotFound("User not found");
-    var signinManager = context.RequestServices.GetRequiredService<SignInManager<User>>();
-    var result = signinManager.PasswordSignInAsync(
+    var result = signInManager.PasswordSignInAsync(
         login.Name, 
         login.Password,
         false,
@@ -90,9 +101,12 @@ app.MapPost("/Login", async (HttpContext context, LoginViewModel login) =>
     .AddEndpointFilter<LoginValidationFilter>();
 
 
-app.MapPost("/Register", async (HttpContext context, RegisterViewModel register) =>
+app.MapPost("/Register", async (
+    RegisterViewModel register,
+    UserManager<User> userManager,
+    SignInManager<User> signInManager
+    ) =>
 {
-    var userManager = context.RequestServices.GetRequiredService<UserManager<User>>();
     var user = await userManager.FindByNameAsync(register.Name);
     if (user is not null)
         return Results.Conflict("User already exists");
@@ -106,8 +120,7 @@ app.MapPost("/Register", async (HttpContext context, RegisterViewModel register)
     var result = await userManager.CreateAsync(user, register.Password);
     if (result.Succeeded)
     {
-        var signinManager = context.RequestServices.GetRequiredService<SignInManager<User>>();
-        await signinManager.SignInAsync(user, false);
+        await signInManager.SignInAsync(user, true);
         return Results.Ok();
     }
 
@@ -115,12 +128,14 @@ app.MapPost("/Register", async (HttpContext context, RegisterViewModel register)
 })
     .AddEndpointFilter<RegisterValidationFilter>();
 
-app.MapPost("/Logout", async (HttpContext context, string logoutId) =>
+app.MapPost("/Logout", async (
+    string logoutId, 
+    SignInManager<User> signInManager,
+    IIdentityServerInteractionService interactionService
+    ) =>
 {
-    var signinManager = context.RequestServices.GetRequiredService<SignInManager<User>>();
-    await signinManager.SignOutAsync();
+    await signInManager.SignOutAsync();
 
-    var interactionService = context.RequestServices.GetRequiredService<IIdentityServerInteractionService>();
     var logoutRequest = await interactionService.GetLogoutContextAsync(logoutId);
     return Results.Redirect(logoutRequest.PostLogoutRedirectUri);
 });

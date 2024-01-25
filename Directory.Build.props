@@ -1,0 +1,22 @@
+﻿<Project>
+    <PropertyGroup>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisMode>all</AnalysisMode>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+        <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference 
+            Include="SonarAnalyzer.CSharp" 
+            Version="8.56.0.67649" 
+            PrivateAssets="all"
+            Condition="$(MSBuildProjectExtension) == '.csproj'"
+        />
+        <PackageReference
+            Include="Serilog.AspNetCore"
+            Version="8.0.1"
+            Condition="$(MSBuildProjectExtension) == '.csproj'"
+        />
+    </ItemGroup>
+</Project>

@@ -1,0 +1,13 @@
+﻿version: '3.7'
+
+
+services:
+  identity:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - '14001:80'
+    volumes:
+      - identity-db:/src/Chat.Identity
+      - ./.containers/logs:/logs
