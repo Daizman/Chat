@@ -6,3 +6,4 @@ riderModule.iml
 .idea/
 Chat.Identity/Chat.Identity.db*
 **.jwk
+**/.containers/

@@ -52,7 +52,7 @@ public static class Config
                 RequirePkce = true,
                 RedirectUris =
                 {
-                    "http://client/"
+                    "http://client/signin-callback"
                 },
                 AllowedCorsOrigins =
                 {
@@ -60,7 +60,7 @@ public static class Config
                 },
                 PostLogoutRedirectUris =
                 {
-                    "http://client/"
+                    "http://client/signout-callback"
                 },
                 AllowedScopes =
                 {

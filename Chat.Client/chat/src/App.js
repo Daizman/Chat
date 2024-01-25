@@ -1,11 +1,12 @@
-import './App.css';
+import Main from "./features/Main";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      <header>
         Welcome to Chat!
       </header>
+      <Main />
     </div>
   );
 }
