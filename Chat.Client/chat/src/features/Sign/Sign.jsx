@@ -1,6 +1,7 @@
-﻿import React, {useState, useRef} from "react";
-import {Button} from "react-bootstrap";
-// import SignModal from "./SignModal/SignModal";
+import React, {useState, useRef} from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import SignModal from "./SignModal/SignModal";
 
 
 const Sign = () => {
@@ -20,11 +21,19 @@ const Sign = () => {
         };
     
     return (
-         <div>
-            <Button onClick={onSignInClick} variant="primary">Войти</Button>
-            <Button onClick={onSignUpClick} variant="secondary">Зарегистрироваться</Button>
-            {/*<SingModal signtype={signtype.current} apply={apply} show={showModal}/>*/}
-         </div>
+        <Container className="m-auto w-100" fluid>
+            <Row>
+                <Col className="text-center">
+                    <Button onClick={onSignInClick} variant="primary">Войти</Button>
+                </Col>
+            </Row>
+            <Row className="mt-2">
+                <Col className="text-center">
+                    <Button onClick={onSignUpClick} variant="secondary">Зарегистрироваться</Button>
+                </Col>
+            </Row>
+            <SignModal signtype={signtype.current} apply={apply} show={showModal}/>
+        </Container>
     );   
 };
 

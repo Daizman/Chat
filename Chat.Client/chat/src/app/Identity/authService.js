@@ -1,4 +1,4 @@
-﻿import { UserManager } from "oidc-client";
+import { UserManager } from "oidc-client";
 
 const config = {
     authority: "http://identity:14001",

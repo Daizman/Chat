@@ -12,7 +12,6 @@ const SignModal = (props) => {
     return (
         <Modal
             {...props}
-            size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
@@ -20,8 +19,8 @@ const SignModal = (props) => {
                 {headers[signtype]}
             </Modal.Header>
             <Modal.Body>
-                <Form.Control type="text" placeholder="Введите логин" />
-                <Form.Control type="password" placeholder="Введите пароль" />
+                <Form.Control className="mb-1" type="text" placeholder="Введите логин" />
+                <Form.Control className="mb-1" type="password" placeholder="Введите пароль" />
                 {signtype === "register" && <Form.Control type="password" placeholder="Повторите пароль" />}
             </Modal.Body>
             <Modal.Footer>

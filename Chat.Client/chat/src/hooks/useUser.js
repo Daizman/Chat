@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import authService from "../app/Identity/authService";
 
 export default function useUser() {
