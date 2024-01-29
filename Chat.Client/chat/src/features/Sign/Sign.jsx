@@ -3,14 +3,10 @@ import { Col, Container, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import SignModal from "./SignModal/SignModal";
 
-
 const Sign = () => {
     const 
         [showModal, setShowModal] = useState(false),
         signtype = useRef("login"),
-        apply = () => {
-            setShowModal(false);
-        },
         onSignInClick = () => {
             signtype.current = "login";
             setShowModal(true);
@@ -32,7 +28,11 @@ const Sign = () => {
                     <Button onClick={onSignUpClick} variant="secondary">Зарегистрироваться</Button>
                 </Col>
             </Row>
-            <SignModal signtype={signtype.current} apply={apply} show={showModal}/>
+            <SignModal 
+                signtype={signtype.current} 
+                show={showModal}
+                closeHandle={() => setShowModal(false)}
+            />
         </Container>
     );   
 };

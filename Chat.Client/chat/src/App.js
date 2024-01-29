@@ -1,15 +1,23 @@
 import Chat from './features/Chat/Chat';
 import Sign from './features/Sign/Sign';
-import useUser from './hooks/useUser';
 import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUser, selectLogged } from './app/User/userSlice';
+import { useEffect } from 'react';
 
 function App() {
-  const isUserLoggedIn = useUser() != null;
+  const
+    dispatch = useDispatch(),
+    isLogged = useSelector(selectLogged);
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
 
   return (
     <div className="main">
       {
-        isUserLoggedIn
+        isLogged
           ? <Chat />
           : <Sign />
       }

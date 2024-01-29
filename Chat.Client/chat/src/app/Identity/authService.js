@@ -1,7 +1,7 @@
 import { UserManager } from "oidc-client";
 
 const config = {
-    authority: "http://identity:14001",
+    authority: process.env.REACT_APP_IDENTITY_URL,
     client_id: "chat-client",
     redirect_uri: "http://client/signin-callback",
     response_type: "code",
@@ -11,4 +11,10 @@ const config = {
 
 const userManager = new UserManager(config);
 
-export default userManager;
+function getUser() {
+    return userManager.getUser();
+}
+
+export {
+    getUser,
+};
